@@ -1,0 +1,161 @@
+}
+
+/* Neon text effect */
+.neon-text {
+    font-size: 3rem;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #0f0;
+    text-shadow: 0 0 10px rgba(0,255,0,0.7), 0 0 20px rgba(0,255,0,0.6), 0 0 30px rgba(0,255,0,0.5);
+    animation: neonPulse 1.5s infinite alternate;
+}
+
+/* Animation for neon text */
+@keyframes neonPulse {
+    0% {
+        text-shadow: 0 0 20px rgba(0,255,0,0.7), 0 0 30px rgba(0,255,0,0.6), 0 0 40px rgba(0,255,0,0.5);
+    }
+    100% {
+        text-shadow: 0 0 5px rgba(0,255,0,0.7), 0 0 10px rgba(0,255,0,0.6), 0 0 20px rgba(0,255,0,0.5);
+    }
+}
+
+/* Particles and background animation */
+.particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Interactive container */
+.container {
+    position: relative;
+    z-index: 2;
+    padding-top: 150px;
+    text-align: center;
+}
+
+/* Custom button with hover animation */
+.button {
+    background: transparent;
+    border: 2px solid #0f0;
+    color: #0f0;
+    font-size: 1.5rem;
+    padding: 15px 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 30px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.button:hover {
+    background: #0f0;
+    color: black;
+    transform: scale(1.1);
+}
+
+/* 3D effect on scroll */
+.scroll-container {
+    perspective: 1000px;
+    overflow: hidden;
+}
+
+.scroll-element {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.scroll-element:hover {
+    transform: rotateY(15deg);
+}
+</style>
+</head>
+<body>
+
+<div class="particles"></div>
+
+<div class="container">
+<h1 class="neon-text">¡Bienvenido al Futuro!</h1>
+<p class="scroll-container">
+    <span class="scroll-element">¡Explora, toca y sorpréndete con los efectos!</span>
+</p>
+<button class="button" id="music-toggle">Iniciar Música</button>
+</div>
+
+<script>
+// Variables para la música y efectos
+let musicPlaying = false;
+const musicButton = document.getElementById('music-toggle');
+const particles = document.querySelector('.particles');
+
+// Cambiar colores de fondo aleatorios
+function randomBackgroundColor() {
+    const colors = ['#ff007f', '#00ff99', '#00ffff', '#ff7f00', '#7fff00'];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    document.body.style.backgroundColor = randomColor;
+}
+
+// Partículas que siguen el ratón
+document.addEventListener('mousemove', function(e) {
+    const particle = document.createElement('div');
+    particle.style.position = 'absolute';
+    particle.style.left = `${e.pageX}px`;
+    particle.style.top = `${e.pageY}px`;
+    particle.style.width = '10px';
+    particle.style.height = '10px';
+    particle.style.background = 'rgba(0, 255, 0, 0.7)';
+    particle.style.borderRadius = '50%';
+    particle.style.animation = 'particleEffect 1s forwards';
+    particles.appendChild(particle);
+
+    // Eliminar la partícula después de que termine la animación
+    setTimeout(() => {
+        particles.removeChild(particle);
+    }, 1000);
+});
+
+// Efecto de partículas con animación CSS
+document.styleSheets[0].insertRule(`
+    @keyframes particleEffect {
+        0% {
+            transform: scale(0.5);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(2);
+            opacity: 0;
+        }
+    }
+`);
+
+// Función para iniciar música y cambiar colores
+musicButton.addEventListener('click', () => {
+    if (!musicPlaying) {
+        musicPlaying = true;
+        musicButton.innerText = 'Pausar Música';
+        // Reproducir música (puedes colocar tu propia URL de música aquí)
+        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+        audio.loop = true;
+        audio.play();
+        // Cambiar colores aleatorios cada 2 segundos mientras se escucha la música
+        setInterval(randomBackgroundColor, 2000);
+    } else {
+        musicPlaying = false;
+        musicButton.innerText = 'Iniciar Música';
+        // Pausar música
+        const audio = document.querySelector('audio');
+        audio.pause();
+    }
+});
+
+</script>
+
+</body>
+</html>
+
